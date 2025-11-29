@@ -14,7 +14,7 @@ export default function ChatMenu({
 }) {
   function newChatButton() {
     const newChat = prompt("Enter name for your chat");
-    socket.current.emit("createChatroom", { user: user, roomName: newChat });
+    socket.current.emit("createChatroom", newChat);
   }
   return (
     <>
@@ -30,19 +30,23 @@ export default function ChatMenu({
             {user}
           </div>
           <div id="all-chats">
-            <ChatList chats={chats} setCurrentChat={setCurrentChat} />
+            <ChatList
+              chats={chats}
+              setCurrentChat={setCurrentChat}
+              messages={messages}
+            />
           </div>
         </div>
         <div id="chatroom">
-          {currentChat ? (
+          {currentChat.id ? (
             <CurrentChat
               socket={socket}
               user={user}
-              chatid={currentChat}
+              currentChat={currentChat}
               messages={messages}
             />
           ) : (
-            <p>Select Chat to start messaging</p>
+            <p className="chat-info">Select Chat to start messaging</p>
           )}
         </div>
       </div>

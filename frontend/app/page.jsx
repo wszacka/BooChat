@@ -10,7 +10,7 @@ export default function Main() {
   const [loginMenu, setLoginMenu] = useState(true); //przełączanie się miedzy login a register (moze usune)
   const [user, setUser] = useState(""); //login urzytkownika
   const [chats, setChats] = useState([]); //lista {id, name}
-  const [currentChat, setCurrentChat] = useState(""); //id chatu
+  const [currentChat, setCurrentChat] = useState({}); //id, name chatu
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {

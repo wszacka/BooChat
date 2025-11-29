@@ -10,12 +10,7 @@
   flex-direction: column;
   height: 100vh;
   background-color: rgb(193, 193, 193);
-}
-
-#chatroom {
-  background-color: gray;
-  display: flex;
-  flex-direction: column-reverse;
+  border-right: 1px solid black;
 }
 
 #logo {
@@ -39,6 +34,7 @@
   align-items: center;
   width: 100%;
   background-color: rgb(165, 165, 165);
+  padding: 10px;
 }
 
 #all-chats {
@@ -46,6 +42,13 @@
 }
 
 .chat {
-  height: 50px;
+  height: -moz-max-content;
+  height: max-content;
   width: 100%;
+  border-bottom: 1px solid black;
+}
+
+.chat p:first-child {
+  font-weight: bold;
+  padding: 10px;
 }/*# sourceMappingURL=chat.css.map */

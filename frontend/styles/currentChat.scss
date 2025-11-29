@@ -1,0 +1,22 @@
+#chatroom {
+  background-color: gray;
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.chat-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#input-message {
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+}
+
+#input-message button {
+  margin: 0;
+}
