@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "start": "node socket.js",
+    "dev": "nodemon socket.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "nodemon": "^3.1.11",
+    "socket.io": "^4.8.1",
+    "uuid": "^13.0.0"
+  }
+}

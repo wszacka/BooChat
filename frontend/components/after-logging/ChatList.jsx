@@ -1,10 +1,10 @@
-export default function ChatList({ chatList, setCurrentChat }) {
+export default function ChatList({ chats, setCurrentChat }) {
   return (
     <>
-      {chatList.map((chat, i) => {
+      {chats.map((chat, i) => {
         return (
-          <div key={i} className="chat" onClick={() => setCurrentChat(chat)}>
-            {chat}
+          <div key={i} className="chat" onClick={() => setCurrentChat(chat.id)}>
+            {chat.name}
           </div>
         );
       })}

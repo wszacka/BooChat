@@ -1,18 +1,20 @@
 import "@/styles/chat.css";
 import ghost from "@/images/ghost-icon.svg";
 import Image from "next/image";
-import { useState } from "react";
 import ChatList from "./ChatList";
 import CurrentChat from "./CurrentChat";
 
-export default function ChatMenu({ user }) {
-  const [currentChat, setCurrentChat] = useState(null);
-  const [chatList, setChatList] = useState([]);
-  const [messages, setMessages] = useState([]);
+export default function ChatMenu({
+  user,
+  currentChat,
+  setCurrentChat,
+  socket,
+  messages,
+  chats,
+}) {
   function newChatButton() {
     const newChat = prompt("Enter name for your chat");
-    setChatList((prev) => [...prev, newChat]);
-    setMessages((prev) => [...prev, { name: newChat, chatMessages: [] }]);
+    socket.current.emit("createChatroom", { user: user, roomName: newChat });
   }
   return (
     <>
@@ -28,12 +30,17 @@ export default function ChatMenu({ user }) {
             {user}
           </div>
           <div id="all-chats">
-            <ChatList chatList={chatList} setCurrentChat={setCurrentChat} />
+            <ChatList chats={chats} setCurrentChat={setCurrentChat} />
           </div>
         </div>
         <div id="chatroom">
           {currentChat ? (
-            <CurrentChat />
+            <CurrentChat
+              socket={socket}
+              user={user}
+              chatid={currentChat}
+              messages={messages}
+            />
           ) : (
             <p>Select Chat to start messaging</p>
           )}

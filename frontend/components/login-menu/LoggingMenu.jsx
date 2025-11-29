@@ -5,7 +5,7 @@ import Register from "./Register";
 import { useEffect, useRef } from "react";
 import "@/styles/loggingMenu.css";
 
-export default function LoggingMenu({ loginMenu, setLoginMenu, setUser }) {
+export default function LoggingMenu({ loginMenu, setLoginMenu, socket }) {
   const myUsernameRef = useRef(null);
 
   useEffect(() => {
@@ -15,9 +15,7 @@ export default function LoggingMenu({ loginMenu, setLoginMenu, setUser }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    localStorage.setItem("username", myUsernameRef.current.value);
-    setUser(myUsernameRef.current.value);
+    socket.current.emit("login", myUsernameRef.current.value);
   }
 
   return (
