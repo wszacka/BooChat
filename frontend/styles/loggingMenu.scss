@@ -1,0 +1,38 @@
+#menu {
+  width: 100%;
+  height: 100%;
+  background-color: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#logging-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  padding: 20px;
+  background-color: whitesmoke;
+  border-radius: 20px;
+}
+
+#logging-menu button {
+  display: block;
+  width: 100%;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+#logging-menu input {
+  padding: 5px;
+  border-radius: 10px;
+}
+
+#logging-menu input,
+button {
+  margin-top: 10px;
+}
