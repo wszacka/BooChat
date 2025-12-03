@@ -3,6 +3,7 @@
   position: relative;
   display: flex;
   flex-direction: column-reverse;
+  overflow-y: auto;
 }
 
 .chat-info {
@@ -14,9 +15,66 @@
 
 #input-message {
   display: grid;
-  grid-template-columns: 10fr 1fr;
+  grid-template-columns: 90% 5% 5%;
 }
 
 #input-message button {
   margin: 0;
+}
+
+.message {
+  position: relative;
+  width: max-content;
+  max-width: 200px;
+  padding: 20px;
+  margin: 5px;
+  background-color: white;
+  border-radius: 20px 20px 20px 0;
+}
+
+.user-message {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.user-message > .message {
+  background-color: bisque;
+  border-radius: 20px 20px 0 20px;
+}
+
+#send-button:hover,
+#emoji-button:hover {
+  background-color: rgb(165, 165, 165);
+}
+
+#send-button,
+#emoji-button,
+#input-message,
+#input-message input {
+  background-color: white;
+  border: none;
+}
+
+.user-message .time {
+  left: auto;
+  right: 5px;
+}
+
+.time {
+  font-size: small;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+}
+
+.message-username {
+  color: rgb(58, 58, 58);
+  position: absolute;
+  top: -20px;
+  left: 10px;
+}
+
+.user-message .message-username {
+  right: 10px;
+  left: auto;
 }

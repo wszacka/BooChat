@@ -3,6 +3,9 @@ import ghost from "@/images/ghost-icon.svg";
 import Image from "next/image";
 import ChatList from "./ChatList";
 import CurrentChat from "./CurrentChat";
+import Status from "./Status";
+import avatar from "@/images/trzask.jpg";
+import { useMessageTime } from "@/contexts/MessageTime";
 
 export default function ChatMenu({
   user,
@@ -12,6 +15,7 @@ export default function ChatMenu({
   messages,
   chats,
 }) {
+  const { showTime, changeTime } = useMessageTime();
   function newChatButton() {
     const newChat = prompt("Enter name for your chat");
     socket.current.emit("createChatroom", newChat);
@@ -24,18 +28,38 @@ export default function ChatMenu({
             <Image src={ghost} alt={"ghost icon"} width={30} />
             <p>BooChat</p>
           </div>
-          <button onClick={newChatButton}>New Chat</button>
+          <div id="buttons-chat">
+            <button id="new-chat" onClick={newChatButton}>
+              New Chat
+            </button>
+            <button
+              onClick={changeTime}
+              disabled={messages.length === 0 ? true : false}
+              id="time-button"
+            >
+              {showTime ? "Hide Time" : "Show Time"}
+            </button>
+          </div>
           <div id="user-div">
-            <div id="user-img"></div>
-            {user}
+            <div id="img-and-user">
+              <Image
+                src={avatar}
+                alt="trzask"
+                width={30}
+                height={30}
+                id="user-img"
+              />
+              {user}
+            </div>
+
+            <Status />
           </div>
-          <div id="all-chats">
-            <ChatList
-              chats={chats}
-              setCurrentChat={setCurrentChat}
-              messages={messages}
-            />
-          </div>
+
+          <ChatList
+            chats={chats}
+            setCurrentChat={setCurrentChat}
+            messages={messages}
+          />
         </div>
         <div id="chatroom">
           {currentChat.id ? (

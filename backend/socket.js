@@ -15,7 +15,7 @@ const answers = ["OK", "Nice!", "WOW!", "Super", "Hi"];
 const users = {}; //socket.id: login
 const chatrooms = {}; //chat_id: nazwa
 
-const messages = {}; // chat_id: [tutaj potem {message: tresc msg,user: od kogo }]
+const messages = {}; // chat_id: [tutaj potem {message: tresc msg,user: od kogo, godzina: timestamp(hh:mm) }]
 //API
 app.get("/api", (req, res) => {
   try {
@@ -58,9 +58,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("regularMessage", ({ user, chat_id, msg }) => {
+    const now = new Date();
+    const minutes =
+      now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
+    const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
     messages[chat_id].push({
       message: msg,
       user: user,
+      time: `${hour}:${minutes}`,
     });
     io.to(chat_id).emit("chatMsg", messages);
   });

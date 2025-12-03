@@ -1,6 +1,7 @@
 "use client";
 import ChatMenu from "@/components/after-logging/ChatMenu";
 import LoggingMenu from "@/components/login-menu/LoggingMenu";
+import { MessageTimeProvider } from "@/contexts/MessageTime";
 import useSocket from "@/hooks/useSocket";
 import { useEffect, useState } from "react";
 
@@ -51,14 +52,16 @@ export default function Main() {
           />
         </div>
       ) : (
-        <ChatMenu
-          user={user}
-          currentChat={currentChat}
-          setCurrentChat={setCurrentChat}
-          socket={socket}
-          messages={messages}
-          chats={chats}
-        />
+        <MessageTimeProvider>
+          <ChatMenu
+            user={user}
+            currentChat={currentChat}
+            setCurrentChat={setCurrentChat}
+            socket={socket}
+            messages={messages}
+            chats={chats}
+          />
+        </MessageTimeProvider>
       )}
     </>
   );
