@@ -3,9 +3,8 @@ import ghost from "@/images/ghost-icon.svg";
 import Image from "next/image";
 import ChatList from "./ChatList";
 import CurrentChat from "./CurrentChat";
-import Status from "./Status";
-import avatar from "@/images/trzask.jpg";
 import { useMessageTime } from "@/contexts/MessageTime";
+import UserAccount from "./UserAccount";
 
 export default function ChatMenu({
   user,
@@ -14,6 +13,7 @@ export default function ChatMenu({
   socket,
   messages,
   chats,
+  setUser,
 }) {
   const { showTime, changeTime } = useMessageTime();
   function newChatButton() {
@@ -46,21 +46,9 @@ export default function ChatMenu({
             chats={chats}
             setCurrentChat={setCurrentChat}
             messages={messages}
+            socket={socket}
           />
-          <div id="user-div">
-            <div id="img-and-user">
-              <Image
-                src={avatar}
-                alt="trzask"
-                width={30}
-                height={30}
-                id="user-img"
-              />
-              {user}
-            </div>
-
-            <Status />
-          </div>
+          <UserAccount user={user} setUser={setUser} socket={socket} />
         </div>
         <div id="chatroom">
           {currentChat.id ? (

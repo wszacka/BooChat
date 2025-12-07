@@ -101,7 +101,11 @@ export default function CurrentChat({ socket, user, currentChat, messages }) {
         </div>
 
         <form onSubmit={onInputSubmit} id="input-message">
-          <input ref={inputRef} type="text"></input>
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Write a message..."
+          ></input>
           <button
             type="button"
             id="emoji-button"

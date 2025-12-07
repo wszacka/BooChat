@@ -1,5 +1,5 @@
 #chatroom {
-  background-color: gray;
+  background-color: #e4e5f1;
   position: relative;
   display: flex;
   flex-direction: column-reverse;
@@ -13,9 +13,14 @@
   transform: translate(-50%, -50%);
 }
 
+#input-message input {
+  padding: 0 10px 0 10px;
+}
+
 #input-message {
   display: grid;
   grid-template-columns: 1fr auto auto;
+  height: 40px;
 }
 
 #input-message button {
@@ -24,25 +29,31 @@
 
 #send-button:hover,
 #emoji-button:hover {
-  background-color: rgb(165, 165, 165);
+  background-color: #c2c4d2;
+}
+
+#send-button,
+#emoji-button {
+  padding: 10px;
 }
 
 #send-button,
 #emoji-button,
 #input-message,
 #input-message input {
-  background-color: white;
+  background-color: #f4f5fe;
   border: none;
 }
 
 .user-message {
+  position: relative;
   display: flex;
   flex-direction: row-reverse;
   align-items: flex-end;
 }
 
 .user-message .message {
-  background-color: bisque;
+  background-color: rgb(151, 151, 236);
   border-radius: 20px 20px 0 20px;
 }
 
@@ -62,7 +73,7 @@
   width: max-content;
   max-width: 200px;
   padding: 20px;
-  background-color: white;
+  background-color: rgb(187, 187, 212);
   border-radius: 20px 20px 20px 0;
 }
 
@@ -103,4 +114,25 @@
   margin-bottom: 20px;
   background-color: transparent;
   border: none;
+}
+
+.edit-button:hover {
+  background-color: #c2c4d2;
+}
+
+#edit-emoji-button {
+  margin: 5px 10px 0 5px;
+  background-color: transparent;
+  border: none;
+}
+
+#edit-emoji-button:hover {
+  background-color: #c2c4d2;
+}
+
+#edit-div {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
 }/*# sourceMappingURL=currentChat.css.map */

@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 #chat-menu {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -9,8 +11,8 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   height: 100vh;
-  background-color: rgb(193, 193, 193);
-  border-right: 1px solid black;
+  background-color: $ligher_main;
+  border-right: 1px solid $main_color;
 }
 
 #logo {
@@ -20,7 +22,6 @@
 }
 
 #user-img {
-  background-color: black;
   width: 30px;
   height: 30px;
   border-radius: 30px;
@@ -32,7 +33,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: rgb(165, 165, 165);
+  background-color: $main_color;
   padding: 10px;
   border-radius: 20px 20px 0 0;
 }
@@ -56,7 +57,7 @@
 }
 
 #user-div > select:hover {
-  background-color: rgb(200, 200, 200);
+  background-color: $chat_color;
 }
 
 .Available,
@@ -75,7 +76,7 @@ option[value="Be Right Back"] {
 }
 
 option:hover {
-  background-color: rgb(165, 165, 165);
+  background-color: $main_color;
 }
 
 #all-chats {
@@ -92,7 +93,7 @@ option:hover {
 }
 
 .chat:hover {
-  background-color: rgb(165, 165, 165);
+  background-color: $main_color;
 }
 
 .chat p:first-child {
@@ -122,16 +123,19 @@ option:hover {
   margin: 10px;
 }
 
-#new-chat:hover,
-#time-button:hover {
-  background-color: rgb(85, 85, 85);
-}
-
 #logo,
 #buttons-chat {
-  background-color: rgb(165, 165, 165);
+  background-color: $main_color;
 }
 
 #time-button:disabled {
   color: gray;
+}
+
+#log-out {
+  margin: 0;
+  background-color: $logout;
+}
+#log-out:hover {
+  background-color: $logout_hover;
 }

@@ -45,9 +45,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("createChatroom", (roomName) => {
-    if (roomName === "") {
-      socket.emit("error", "Write with who you want to talk");
-    } else {
+    if (roomName !== null && roomName.trim() !== "") {
       const chat_id = uuidv4();
       chatrooms[chat_id] = roomName;
       messages[chat_id] = [];
@@ -96,43 +94,20 @@ io.on("connection", (socket) => {
     socket.emit("chatMsg", messages);
   });
 
-  //   socket.on("deleteChat", ({ user, chat_id }) => {
-  //     members[socket.id] = members[socket.id].filter((id) => id !== chat_id);
-  //     socket.leave(chat_id);
-  //     messages[chat_id].push({
-  //       message: `${user} has left the chatroom`,
-  //       user: "System",
-  //     });
-  //     io.to(chat_id).emit("chatMsg", messages);
-  //   });
+  socket.on("deleteChat", ({ chat_id }) => {
+    delete chatrooms[chat_id];
+    socket.emit("leaveChat", chat_id);
+  });
 
-  //   socket.on("logout", (user) => {
-  //     delete users[socket.id];
-  //     console.log(`User ${user} logged out`);
+  socket.on("logout", (user) => {
+    delete users[socket.id];
+    console.log(`User ${user} logged out`);
+  });
 
-  //     members[socket.id]?.forEach((chatID) => {
-  //       messages[chatID].push({
-  //         message: `${user} has left the chatroom`,
-  //         user: "System",
-  //       });
-  //       io.to(chatID).emit("chatMsg", messages);
-  //     });
-  //     delete members[socket.id];
-  //   });
-
-  //   socket.on("disconnect", () => {
-  //     console.log("User disconnected: ", socket.id);
-  //     const username = users[socket.id];
-  //     delete users[socket.id];
-  //     members[socket.id]?.forEach((chatID) => {
-  //       messages[chatID].push({
-  //         message: `${username} has left the chatroom`,
-  //         user: "System",
-  //       });
-  //       io.to(chatID).emit("chatMsg", messages);
-  //     });
-  //     delete members[socket.id];
-  //   });
+  socket.on("disconnect", () => {
+    console.log("User disconnected: ", socket.id);
+    delete users[socket.id];
+  });
 });
 
 const PORT = 8000;

@@ -1,6 +1,7 @@
 "use client";
 import ChatMenu from "@/components/after-logging/ChatMenu";
-import LoggingMenu from "@/components/login-menu/LoggingMenu";
+import Loading from "@/components/Loading";
+import LoggingMenu from "@/components/LoggingMenu";
 import { MessageTimeProvider } from "@/contexts/MessageTime";
 import useSocket from "@/hooks/useSocket";
 import { useEffect, useState } from "react";
@@ -14,10 +15,13 @@ export default function Main() {
   const [currentChat, setCurrentChat] = useState({}); //id, name chatu
   const [messages, setMessages] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const username = localStorage.getItem("username");
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser(username);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -32,6 +36,10 @@ export default function Main() {
       setChats((prev) => [...prev, { id: id, name: name }]);
     });
 
+    socket.current.on("leaveChat", (chat_id) => {
+      setChats((prev) => prev.filter((chat) => chat.id === chat_id));
+    });
+
     socket.current.on("error", (msg) => {
       alert(msg);
     });
@@ -43,13 +51,11 @@ export default function Main() {
 
   return (
     <>
-      {!user ? (
+      {loading ? (
+        <Loading />
+      ) : !user ? (
         <div id="menu">
-          <LoggingMenu
-            loginMenu={loginMenu}
-            setLoginMenu={setLoginMenu}
-            socket={socket}
-          />
+          <LoggingMenu socket={socket} />
         </div>
       ) : (
         <MessageTimeProvider>
@@ -60,6 +66,7 @@ export default function Main() {
             socket={socket}
             messages={messages}
             chats={chats}
+            setUser={setUser}
           />
         </MessageTimeProvider>
       )}

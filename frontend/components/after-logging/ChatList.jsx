@@ -1,6 +1,6 @@
 import { useMessageTime } from "@/contexts/MessageTime";
 
-export default function ChatList({ chats, setCurrentChat, messages }) {
+export default function ChatList({ chats, setCurrentChat, messages, socket }) {
   const { showTime, changeTime } = useMessageTime();
   return (
     <>
@@ -27,6 +27,11 @@ export default function ChatList({ chats, setCurrentChat, messages }) {
               ) : (
                 <p>No messages yet</p>
               )}
+              <button
+                onClick={() => socket.current.emit("deleteChat", chat.id)}
+              >
+                Delete
+              </button>
             </div>
           );
         })}
