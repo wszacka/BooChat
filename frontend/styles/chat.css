@@ -6,8 +6,8 @@
 
 #chat-list {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   height: 100vh;
   background-color: rgb(193, 193, 193);
   border-right: 1px solid black;
@@ -27,11 +27,7 @@
 }
 
 #user-div {
-  z-index: 100;
   box-sizing: border-box;
-  position: absolute;
-  bottom: 0;
-  left: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -129,10 +125,6 @@ option:hover {
 #new-chat,
 #time-button {
   margin: 10px;
-  padding: 5px;
-  background-color: rgb(46, 46, 46);
-  color: white;
-  border-radius: 5px;
 }
 
 #new-chat:hover,

@@ -24,22 +24,29 @@ export default function ChatMenu({
     <>
       <div id="chat-menu">
         <div id="chat-list">
-          <div id="logo">
-            <Image src={ghost} alt={"ghost icon"} width={30} />
-            <p>BooChat</p>
+          <div>
+            <div id="logo">
+              <Image src={ghost} alt={"ghost icon"} width={30} />
+              <p>BooChat</p>
+            </div>
+            <div id="buttons-chat">
+              <button id="new-chat" onClick={newChatButton}>
+                New Chat
+              </button>
+              <button
+                onClick={changeTime}
+                disabled={messages.length === 0 ? true : false}
+                id="time-button"
+              >
+                {showTime ? "Hide Time" : "Show Time"}
+              </button>
+            </div>
           </div>
-          <div id="buttons-chat">
-            <button id="new-chat" onClick={newChatButton}>
-              New Chat
-            </button>
-            <button
-              onClick={changeTime}
-              disabled={messages.length === 0 ? true : false}
-              id="time-button"
-            >
-              {showTime ? "Hide Time" : "Show Time"}
-            </button>
-          </div>
+          <ChatList
+            chats={chats}
+            setCurrentChat={setCurrentChat}
+            messages={messages}
+          />
           <div id="user-div">
             <div id="img-and-user">
               <Image
@@ -54,12 +61,6 @@ export default function ChatMenu({
 
             <Status />
           </div>
-
-          <ChatList
-            chats={chats}
-            setCurrentChat={setCurrentChat}
-            messages={messages}
-          />
         </div>
         <div id="chatroom">
           {currentChat.id ? (

@@ -12,34 +12,15 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+//-----------MAIN INPUT
 
 #input-message {
   display: grid;
-  grid-template-columns: 90% 5% 5%;
+  grid-template-columns: 1fr auto auto;
 }
 
 #input-message button {
   margin: 0;
-}
-
-.message {
-  position: relative;
-  width: max-content;
-  max-width: 200px;
-  padding: 20px;
-  margin: 5px;
-  background-color: white;
-  border-radius: 20px 20px 20px 0;
-}
-
-.user-message {
-  display: flex;
-  flex-direction: row-reverse;
-}
-
-.user-message > .message {
-  background-color: bisque;
-  border-radius: 20px 20px 0 20px;
 }
 
 #send-button:hover,
@@ -55,26 +36,70 @@
   border: none;
 }
 
+//-------------MESSAGES
+.user-message {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+}
+
+.user-message .message {
+  background-color: bisque;
+  border-radius: 20px 20px 0 20px;
+}
+
+.time,
+.username {
+  margin: 10px 0 10px 0;
+}
+
+.message-div {
+  padding: 5px;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.message {
+  width: max-content;
+  max-width: 200px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 20px 20px 20px 0;
+}
+
+.edit-msg {
+  font-size: small;
+  font-style: italic;
+}
 .user-message .time {
   left: auto;
   right: 5px;
 }
 
 .time {
-  font-size: small;
+  color: rgb(58, 58, 58);
+  font-size: x-small;
   position: absolute;
-  bottom: 5px;
+  bottom: -5px;
   left: 5px;
 }
 
 .message-username {
   color: rgb(58, 58, 58);
   position: absolute;
-  top: -20px;
-  left: 10px;
+  top: -15px;
+  left: 5px;
 }
 
 .user-message .message-username {
-  right: 10px;
   left: auto;
+  right: 5px;
+}
+
+.edit-button {
+  margin: 0;
+  height: min-content;
+  margin-bottom: 20px;
+  background-color: transparent;
+  border: none;
 }

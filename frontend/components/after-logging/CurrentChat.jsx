@@ -4,6 +4,8 @@ import sendIcon from "@/images/send.svg";
 import { useEffect, useRef, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { useMessageTime } from "@/contexts/MessageTime";
+import RegularMessage from "./RegularMessage";
+import EditMessage from "./EditMessage";
 
 export default function CurrentChat({ socket, user, currentChat, messages }) {
   const inputRef = useRef(null);
@@ -73,11 +75,23 @@ export default function CurrentChat({ socket, user, currentChat, messages }) {
                   key={i}
                   className={data.user === user ? "user-message" : ""}
                 >
-                  <div className="message">
-                    <p className="message-username">{data.user}</p>
-                    {data.message}
-                    {showTime && <span className="time">({data.time})</span>}
-                  </div>
+                  {data.under_edit ? (
+                    <EditMessage
+                      data={data}
+                      index={i}
+                      id={currentChat.id}
+                      socket={socket}
+                    />
+                  ) : (
+                    <RegularMessage
+                      data={data}
+                      i={i}
+                      currentChat={currentChat}
+                      showTime={showTime}
+                      socket={socket}
+                      user={user}
+                    />
+                  )}
                 </div>
               );
             })
