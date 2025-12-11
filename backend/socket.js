@@ -3,6 +3,12 @@ import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
+
+const PORT = 8000;
+const bielik_api = process.env.OLLAMA_API_BASE;
+const bielik_name = process.env.BIELIK_MODEL_NAME;
 
 const app = express();
 const server = createServer(app);
@@ -15,15 +21,37 @@ const answers = ["OK", "Nice!", "WOW!", "Super", "Hi"];
 const users = {}; //socket.id: login
 const chatrooms = {}; //chat_id: nazwa
 
-const messages = {}; // chat_id: [tutaj potem {message: tresc msg,user: od kogo, godzina: timestamp(hh:mm), under_edit: boolean, last_edited: czas kiedy ostatnio byla edycja}]
+const messages = {}; // chat_id: [tutaj potem {main_user: jako kto,message: tresc msg,user: od kogo, godzina: timestamp(hh:mm), under_edit: boolean, last_edited: czas kiedy ostatnio byla edycja}]
 //API
-app.get("/api", (req, res) => {
+async function generate(zdanie) {
+  const prompt = `Jesteś moim kumplem. Odpowiadasz w żartobliwy sposób z emotikonami.
+Pytanie: ${zdanie}`;
+  const response = await fetch(`${bielik_api}/api/generate`, {
+    method: "POST",
+    body: JSON.stringify({
+      model: bielik_name,
+      prompt: prompt,
+      stream: false,
+      temperature: 0.7,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+app.get("/api/:zdanie", async (req, res) => {
   try {
-    const randomIndex = Math.floor(Math.random() * answers.length);
-    const answr = answers[randomIndex];
+    const zdanie = req.params.zdanie;
+    if (!zdanie) return res.status(400).json({ error: "Brak zdania" });
+    const odp = await generate(zdanie);
+    const randomNumber = Math.floor(Math.random() * 4) + 1;
     setTimeout(() => {
-      res.status(200).json({ answer: answr });
-    }, 2000);
+      res.status(200).json({ answer: odp.response });
+    }, randomNumber * 1000);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -102,13 +130,14 @@ io.on("connection", (socket) => {
   socket.on("logout", (user) => {
     delete users[socket.id];
     console.log(`User ${user} logged out`);
+    socket.emit("logout-user");
   });
 
   socket.on("disconnect", () => {
     console.log("User disconnected: ", socket.id);
     delete users[socket.id];
+    socket.emit("logout-user");
   });
 });
 
-const PORT = 8000;
 server.listen(PORT, () => console.log("Server is running on port:", PORT));

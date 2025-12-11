@@ -14,21 +14,27 @@ export default function ChatList({ chats, setCurrentChat, messages, socket }) {
               className="chat"
               onClick={() => setCurrentChat({ id: chat.id, name: chat.name })}
             >
-              <p>{chat.name}</p>
+              <p>
+                {chat.name}{" "}
+                {showTime && last_msg.time && (
+                  <span className="time-chat">({last_msg.time})</span>
+                )}
+              </p>
               {last_msg ? (
                 <>
-                  <p>
+                  <p className="last-msg">
                     {last_msg.user}: {last_msg.message}
                   </p>
-                  {showTime && (
-                    <span className="time-chat">({last_msg.time})</span>
-                  )}
                 </>
               ) : (
                 <p>No messages yet</p>
               )}
               <button
-                onClick={() => socket.current.emit("deleteChat", chat.id)}
+                className="delete-chat"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  socket.current.emit("deleteChat", chat.id);
+                }}
               >
                 Delete
               </button>

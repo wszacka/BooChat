@@ -1,5 +1,7 @@
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
+import emoji from "@/images/emoji-icon.svg";
+import Image from "next/image";
 
 export default function EditMessage({ data, index, id, socket }) {
   const editRef = useRef(data.message);
@@ -49,7 +51,7 @@ export default function EditMessage({ data, index, id, socket }) {
             id="edit-emoji-button"
             onClick={() => setEmojiShown((prev) => !prev)}
           >
-            🙂
+            <Image src={emoji} alt="emoji" width={20} />
           </button>
           <button onClick={onButtonClick}>Submit</button>
           {emojiShown && (

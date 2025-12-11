@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 export default function Main() {
   const socket = useSocket();
 
-  const [loginMenu, setLoginMenu] = useState(true); //przełączanie się miedzy login a register (moze usune)
   const [user, setUser] = useState(""); //login urzytkownika
   const [chats, setChats] = useState([]); //lista {id, name}
   const [currentChat, setCurrentChat] = useState({}); //id, name chatu
@@ -46,6 +45,12 @@ export default function Main() {
 
     socket.current.on("chatMsg", (msgs) => {
       setMessages(msgs);
+    });
+
+    socket.current.on("logout-user", () => {
+      setChats([]);
+      setCurrentChat({});
+      setMessages([]);
     });
   }, [socket]);
 

@@ -1,6 +1,7 @@
 import "@/styles/currentChat.css";
 import Image from "next/image";
 import sendIcon from "@/images/send.svg";
+import emoji from "@/images/emoji-icon.svg";
 import { useEffect, useRef, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { useMessageTime } from "@/contexts/MessageTime";
@@ -24,44 +25,64 @@ export default function CurrentChat({ socket, user, currentChat, messages }) {
     inputRef.current.focus();
   }, []);
 
-  async function botAnswer() {
-    const res = await fetch("http://localhost:8000/api");
-    const data = await res.json();
-    if (res.ok) {
-      socket.current.emit("regularMessage", {
-        user: currentChat.name,
-        chat_id: currentChat.id,
-        msg: data.answer,
-      });
+  // async function botAnswer(msg) {
+  //   const res = await fetch(`/api/${msg}`);
+  //   const data = await res.json();
+  //   if (res.ok) {
+  //     socket.current.emit("regularMessage", {
+  //       user: currentChat.name,
+  //       chat_id: currentChat.id,
+  //       msg: data.answer,
+  //     });
+  //   }
+  // }
+
+  async function botAnswer(msg) {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/${encodeURIComponent(msg)}`
+      );
+      const data = await res.json();
+      if (res.ok) {
+        socket.current.emit("regularMessage", {
+          user: currentChat.name,
+          chat_id: currentChat.id,
+          msg: data.answer,
+        });
+      }
+    } catch (error) {
+      console.error("Błąd fetch:", error);
     }
   }
 
   function onInputSubmit(e) {
     e.preventDefault();
     const msg = inputRef.current.value;
-    if (msg !== "") {
+    const c_msg = msg.trim();
+    if (c_msg !== "") {
       socket.current.emit("regularMessage", {
         user: user,
         chat_id: currentChat.id,
-        msg: msg,
+        msg: c_msg,
       });
+      botAnswer(c_msg);
       inputRef.current.value = "";
       setShowPicker(false);
-      botAnswer();
     }
   }
 
   function onButtonClick() {
     const msg = inputRef.current.value;
-    if (msg !== "") {
+    const c_msg = msg.trim();
+    if (c_msg !== "") {
       socket.current.emit("regularMessage", {
         user: user,
         chat_id: currentChat.id,
-        msg: msg,
+        msg: c_msg,
       });
+      botAnswer(c_msg);
       inputRef.current.value = "";
       setShowPicker(false);
-      botAnswer();
     }
   }
   return (
@@ -111,7 +132,7 @@ export default function CurrentChat({ socket, user, currentChat, messages }) {
             id="emoji-button"
             onClick={() => setShowPicker((prev) => !prev)}
           >
-            🙂
+            <Image src={emoji} alt="emoji" width={20} />
           </button>
           <button id="send-button" onClick={onButtonClick}>
             <Image id="send-img" src={sendIcon} alt="sendIc" width={20} />

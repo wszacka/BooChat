@@ -92,6 +92,7 @@ option:hover {
   border-radius: 10px;
   padding-bottom: 5px;
   position: relative;
+  max-height: 310px;
 }
 
 .chat:hover {
@@ -106,6 +107,9 @@ option:hover {
 .chat p:nth-child(2) {
   padding-left: 5px;
   font-size: small;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #buttons-chat {
@@ -114,11 +118,8 @@ option:hover {
 }
 
 .time-chat {
+  font-weight: normal;
   font-size: small;
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translate(0, -50%);
 }
 
 #new-chat,
@@ -141,5 +142,17 @@ option:hover {
 }
 
 #log-out:hover {
+  background-color: rgb(222, 30, 30);
+}
+
+.delete-chat {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: x-small;
+  background-color: rgb(232, 80, 80);
+}
+
+.delete-chat:hover {
   background-color: rgb(222, 30, 30);
 }/*# sourceMappingURL=chat.css.map */

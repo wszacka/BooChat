@@ -73,7 +73,7 @@
 
 .message {
   width: max-content;
-  max-width: 200px;
+  max-width: 300px;
   padding: 20px;
   background-color: $bot_answer;
   border-radius: 20px 20px 20px 0;
@@ -121,7 +121,8 @@
 }
 
 #edit-emoji-button {
-  margin: 5px 10px 0 5px;
+  margin-top: 10px;
+  margin-left: 10px;
   background-color: transparent;
   border: none;
 }
