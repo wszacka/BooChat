@@ -14,22 +14,24 @@ export default function EditMessage({ data, index, id, socket }) {
   function onInputSubmit(e) {
     e.preventDefault();
     const msg = editRef.current.value;
-    if (msg !== data.message) {
+    const c_msg = msg.trim();
+    if (msg !== data.message && c_msg !== "") {
       socket.current.emit("edit-msg", {
         index: index,
         chat_id: id,
-        msg: msg,
+        msg: c_msg,
       });
     }
   }
 
   function onButtonClick() {
     const msg = editRef.current.value;
-    if (msg !== data.message) {
+    const c_msg = msg.trim();
+    if (msg !== data.message && c_msg !== "") {
       socket.current.emit("edit-msg", {
         index: index,
         chat_id: id,
-        msg: msg,
+        msg: c_msg,
       });
     }
   }

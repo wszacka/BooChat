@@ -69,12 +69,15 @@
 }
 
 .message {
-  width: -moz-max-content;
-  width: max-content;
+  width: -moz-fit-content;
+  width: fit-content;
   max-width: 300px;
   padding: 20px;
   background-color: rgb(187, 187, 212);
   border-radius: 20px 20px 20px 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .edit-msg {

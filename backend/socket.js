@@ -21,8 +21,8 @@ const answers = ["OK", "Nice!", "WOW!", "Super", "Hi"];
 const users = {}; //socket.id: login
 const chatrooms = {}; //chat_id: nazwa
 
-const messages = {}; // chat_id: [tutaj potem {main_user: jako kto,message: tresc msg,user: od kogo, godzina: timestamp(hh:mm), under_edit: boolean, last_edited: czas kiedy ostatnio byla edycja}]
-//API
+const messages = {}; // chat_id: [tutaj potem {message: tresc msg,user: od kogo, godzina: timestamp(hh:mm), under_edit: boolean, last_edited: czas kiedy ostatnio byla edycja}]
+
 async function generate(zdanie) {
   const prompt = `Jesteś moim kumplem. Odpowiadasz w żartobliwy sposób z emotikonami.
 Pytanie: ${zdanie}`;
@@ -42,7 +42,20 @@ Pytanie: ${zdanie}`;
   const data = await response.json();
   return data;
 }
-
+//API
+//przygotowane odp
+app.get("/api", (req, res) => {
+  try {
+    const randomIndex = Math.floor(Math.random() * answers.length);
+    const answr = answers[randomIndex];
+    setTimeout(() => {
+      res.status(200).json({ answer: answr });
+    }, 2000);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+//odpowiedzi od bielika
 app.get("/api/:zdanie", async (req, res) => {
   try {
     const zdanie = req.params.zdanie;
