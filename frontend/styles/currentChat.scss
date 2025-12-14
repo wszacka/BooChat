@@ -111,15 +111,21 @@
   right: 5px;
 }
 
-.edit-button {
-  margin: 0;
+.edit-button,
+#cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  padding: 5px;
   height: min-content;
   margin-bottom: 20px;
   background-color: transparent;
   border: none;
 }
 
-.edit-button:hover {
+.edit-button:hover,
+#cancel:hover {
   background-color: $chat_button_hover;
 }
 

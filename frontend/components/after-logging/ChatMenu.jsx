@@ -3,8 +3,9 @@ import ghost from "@/images/ghost-icon.svg";
 import Image from "next/image";
 import ChatList from "./ChatList";
 import CurrentChat from "./CurrentChat";
-import { useMessageTime } from "@/contexts/MessageTime";
+import { useMessageTime } from "@/hooks/useMessageTime";
 import UserAccount from "./UserAccount";
+import { useToast } from "@/hooks/useToast";
 
 export default function ChatMenu({
   user,
@@ -16,10 +17,22 @@ export default function ChatMenu({
   setUser,
 }) {
   const { showTime, changeTime } = useMessageTime();
+  const { addToast } = useToast();
+
   function newChatButton() {
     const newChat = prompt("Enter name for your chat");
     socket.current.emit("createChatroom", newChat);
+    addToast(`Created new chat: ${newChat}`, "success");
   }
+
+  function buttonClick() {
+    if (messages.length === 0) {
+      addToast("You have to write a message to show time", "warning");
+    } else {
+      changeTime();
+    }
+  }
+
   return (
     <>
       <div id="chat-menu">
@@ -33,17 +46,14 @@ export default function ChatMenu({
               <button id="new-chat" onClick={newChatButton}>
                 New Chat
               </button>
-              <button
-                onClick={changeTime}
-                disabled={messages.length === 0 ? true : false}
-                id="time-button"
-              >
+              <button onClick={buttonClick} id="time-button">
                 {showTime ? "Hide Time" : "Show Time"}
               </button>
             </div>
           </div>
           <ChatList
             chats={chats}
+            currentChat={currentChat}
             setCurrentChat={setCurrentChat}
             messages={messages}
             socket={socket}

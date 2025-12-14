@@ -1,5 +1,5 @@
 import "@/styles/currentChat.css";
-import { useMessageTime } from "@/contexts/MessageTime";
+import { useMessageTime } from "@/hooks/useMessageTime";
 import RegularMessage from "./RegularMessage";
 import EditMessage from "./EditMessage";
 import InputCurrChat from "./InputCurrChat";
@@ -7,7 +7,7 @@ import { useRef } from "react";
 
 export default function CurrentChat({ socket, user, currentChat, messages }) {
   const inputRef = useRef(null);
-  const { showTime, changeTime } = useMessageTime();
+  const { showTime } = useMessageTime();
 
   return (
     <>

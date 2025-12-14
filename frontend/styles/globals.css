@@ -32,6 +32,75 @@ body {
   animation: pulse 1.2s ease-in-out infinite alternate;
 }
 
+.toast-container {
+  z-index: 100;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  height: -moz-max-content;
+  height: max-content;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  animation: toast-in 0.3s ease forwards;
+}
+
+.toast.hide {
+  animation: toast-out 0.3s ease forwards;
+}
+
+.toast-close,
+#comparison-x {
+  border-radius: 10px;
+  border: none;
+  background-color: #333;
+  color: white;
+  margin-left: auto;
+}
+
+.toast.success {
+  background-color: rgb(91, 227, 91);
+}
+
+.toast.error {
+  background-color: red;
+}
+
+.toast.warning {
+  background-color: yellow;
+}
+
+.toast.info {
+  background-color: lightblue;
+}
+
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes toast-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
 @keyframes pulse {
   from {
     transform: scale(1);

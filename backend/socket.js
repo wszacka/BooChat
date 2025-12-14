@@ -75,81 +75,134 @@ io.on("connection", (socket) => {
   console.log("New connection:", socket.id);
 
   socket.on("login", (username) => {
-    if (!username) {
-      socket.emit("error", "You have to write your login");
-      return;
+    try {
+      users[socket.id] = username;
+      console.log("Logged in as:", username);
+      socket.emit("loginSuccess", username);
+    } catch (err) {
+      socket.emit("error", err);
     }
-
-    users[socket.id] = username;
-    console.log("Logged in as:", username);
-    socket.emit("loginSuccess", username);
   });
 
   socket.on("createChatroom", (roomName) => {
-    if (roomName !== null && roomName.trim() !== "") {
-      const chat_id = uuidv4();
-      chatrooms[chat_id] = roomName;
-      messages[chat_id] = [];
-      socket.join(chat_id);
-      console.log("Created chatroom with id:", chat_id, "and name:", roomName);
-      socket.emit("chatRoomSuccess", { name: roomName, id: chat_id });
+    try {
+      if (roomName !== null && roomName.trim() !== "") {
+        const chat_id = uuidv4();
+        chatrooms[chat_id] = roomName;
+        messages[chat_id] = [];
+        socket.join(chat_id);
+        console.log(
+          "Created chatroom with id:",
+          chat_id,
+          "and name:",
+          roomName
+        );
+        socket.emit("chatRoomSuccess", { name: roomName, id: chat_id });
+      }
+    } catch (err) {
+      socket.emit("error", err);
     }
   });
 
   socket.on("regularMessage", ({ user, chat_id, msg }) => {
-    const now = new Date();
-    const minutes =
-      now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
-    const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
-    messages[chat_id].push({
-      message: msg,
-      user: user,
-      time: `${hour}:${minutes}`,
-      under_edit: false,
-      last_edited: false,
-    });
-    io.to(chat_id).emit("chatMsg", messages);
+    try {
+      const now = new Date();
+      const minutes =
+        now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
+      const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
+      messages[chat_id].push({
+        message: msg,
+        user: user,
+        time: `${hour}:${minutes}`,
+        under_edit: false,
+        last_edited: false,
+      });
+      io.to(chat_id).emit("chatMsg", messages);
+    } catch (err) {
+      socket.emit("error", err);
+    }
   });
   socket.on("click-edit", ({ index, chat_id }) => {
-    messages[chat_id].map((data, i) => {
-      if (i === index) {
-        data.under_edit = true;
+    try {
+      //tylko jedna mozemy edytowac
+      const isEditing = messages[chat_id].some((data) => data.under_edit);
+
+      if (isEditing) {
+        socket.emit("error", "You can't edit two messages at once");
+        return; // zatrzymuje całą funkcję
       }
-    });
-    socket.emit("chatMsg", messages);
+
+      messages[chat_id].forEach((data, i) => {
+        if (i === index) {
+          data.under_edit = true;
+        }
+      });
+      socket.emit("chatMsg", messages);
+    } catch (err) {
+      socket.emit("error", err);
+    }
+  });
+
+  socket.on("cancel-edit", ({ index, chat_id }) => {
+    try {
+      messages[chat_id].forEach((data, i) => {
+        if (i === index) {
+          data.under_edit = false;
+        }
+      });
+      socket.emit("chatMsg", messages);
+    } catch (err) {
+      socket.emit("error", err);
+    }
   });
 
   socket.on("edit-msg", ({ index, chat_id, msg }) => {
-    const now = new Date();
-    const minutes =
-      now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
-    const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
-    messages[chat_id].map((data, i) => {
-      if (i === index) {
-        data.message = msg;
-        data.under_edit = false;
-        data.last_edited = `${hour}:${minutes}`;
-      }
-    });
-    console.log("Edited message to:", msg);
-    socket.emit("chatMsg", messages);
+    try {
+      const now = new Date();
+      const minutes =
+        now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
+      const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
+      messages[chat_id].map((data, i) => {
+        if (i === index) {
+          data.message = msg;
+          data.under_edit = false;
+          data.last_edited = `${hour}:${minutes}`;
+        }
+      });
+      console.log("Edited message to:", msg);
+      socket.emit("chatMsg", messages);
+    } catch (err) {
+      socket.emit("error", err);
+    }
   });
 
-  socket.on("deleteChat", ({ chat_id }) => {
-    delete chatrooms[chat_id];
-    socket.emit("leaveChat", chat_id);
+  socket.on("deleteChat", (chat_id) => {
+    try {
+      delete chatrooms[chat_id];
+      socket.emit("leaveChat", chat_id);
+    } catch (err) {
+      socket.emit("error", err);
+    }
   });
 
   socket.on("logout", (user) => {
-    delete users[socket.id];
-    console.log(`User ${user} logged out`);
-    socket.emit("logout-user");
+    try {
+      delete users[socket.id];
+      console.log(`User ${user} logged out`);
+      socket.emit("logout-user");
+    } catch (err) {
+      socket.emit("error", err);
+    }
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected: ", socket.id);
-    delete users[socket.id];
-    socket.emit("logout-user");
+    try {
+      console.log("User disconnected: ", socket.id);
+      delete users[socket.id];
+      socket.emit("logout-user");
+    } catch (err) {
+      socket.emit("error", err);
+    }
   });
 });
 

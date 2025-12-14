@@ -2,9 +2,11 @@ import Image from "next/image";
 import ghost from "@/images/ghost-icon.svg";
 import { useEffect, useRef } from "react";
 import "@/styles/loggingMenu.css";
+import { useToast } from "@/hooks/useToast";
 
 export default function LoggingMenu({ socket }) {
   const myUsernameRef = useRef(null);
+  const { addToast } = useToast();
 
   useEffect(() => {
     //focus na input
@@ -13,7 +15,13 @@ export default function LoggingMenu({ socket }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    socket.current.emit("login", myUsernameRef.current.value);
+    const user = myUsernameRef.current.value;
+    if (user.trim() === "") {
+      addToast("You have to write your username to log in!", "error");
+    } else {
+      socket.current.emit("login", user);
+      addToast(`Succesfully logged as: ${user}`, "success");
+    }
   }
 
   return (

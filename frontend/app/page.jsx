@@ -4,10 +4,12 @@ import Loading from "@/components/Loading";
 import LoggingMenu from "@/components/LoggingMenu";
 import { MessageTimeProvider } from "@/contexts/MessageTime";
 import useSocket from "@/hooks/useSocket";
+import { useToast } from "@/hooks/useToast";
 import { useEffect, useState } from "react";
 
 export default function Main() {
   const socket = useSocket();
+  const { addToast } = useToast();
 
   const [user, setUser] = useState(""); //login urzytkownika
   const [chats, setChats] = useState([]); //lista {id, name}
@@ -32,15 +34,15 @@ export default function Main() {
     });
 
     socket.current.on("chatRoomSuccess", ({ name, id }) => {
-      setChats((prev) => [...prev, { id: id, name: name }]);
+      setChats((prev) => [...prev, { id, name }]);
     });
 
     socket.current.on("leaveChat", (chat_id) => {
-      setChats((prev) => prev.filter((chat) => chat.id === chat_id));
+      setChats((prev) => prev.filter((chat) => chat.id !== chat_id));
     });
 
     socket.current.on("error", (msg) => {
-      alert(msg);
+      addToast(`error: ${msg}`, "error");
     });
 
     socket.current.on("chatMsg", (msgs) => {

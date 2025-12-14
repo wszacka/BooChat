@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Status from "./Status";
 import avatar from "@/images/trzask.jpg";
+import { useToast } from "@/hooks/useToast";
 
 export default function UserAccount({ user, setUser, socket }) {
+  const { addToast } = useToast();
   return (
     <>
       <div id="user-div">
@@ -23,6 +25,7 @@ export default function UserAccount({ user, setUser, socket }) {
             localStorage.removeItem("username");
             localStorage.removeItem("userStatus");
             setUser("");
+            addToast(`You logged out as: ${user}`, "info");
             socket.current.emit("logout", user);
           }}
         >

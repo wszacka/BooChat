@@ -1,9 +1,12 @@
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import emoji from "@/images/emoji-icon.svg";
+import cancel from "@/images/cancel-edit.svg";
 import Image from "next/image";
+import { useToast } from "@/hooks/useToast";
 
 export default function EditMessage({ data, index, id, socket }) {
+  const { addToast } = useToast();
   const editRef = useRef(data.message);
   const [emojiShown, setEmojiShown] = useState(false);
 
@@ -11,7 +14,7 @@ export default function EditMessage({ data, index, id, socket }) {
     editRef.current.focus();
   }, []);
 
-  function onInputSubmit(e) {
+  function onSubmit(e) {
     e.preventDefault();
     const msg = editRef.current.value;
     const c_msg = msg.trim();
@@ -21,18 +24,10 @@ export default function EditMessage({ data, index, id, socket }) {
         chat_id: id,
         msg: c_msg,
       });
-    }
-  }
-
-  function onButtonClick() {
-    const msg = editRef.current.value;
-    const c_msg = msg.trim();
-    if (msg !== data.message && c_msg !== "") {
-      socket.current.emit("edit-msg", {
-        index: index,
-        chat_id: id,
-        msg: c_msg,
-      });
+    } else if (msg === data.message) {
+      addToast("You can't edit to the same message", "warning");
+    } else {
+      addToast("You can't edit to blank message", "warning");
     }
   }
 
@@ -46,7 +41,7 @@ export default function EditMessage({ data, index, id, socket }) {
   return (
     <>
       <div className="message-div">
-        <form onSubmit={onInputSubmit} className="message" id="edit-div">
+        <form onSubmit={onSubmit} className="message" id="edit-div">
           <input ref={editRef} type="text" defaultValue={data.message}></input>
           <button
             type="button"
@@ -55,7 +50,10 @@ export default function EditMessage({ data, index, id, socket }) {
           >
             <Image src={emoji} alt="emoji" width={20} />
           </button>
-          <button onClick={onButtonClick}>Submit</button>
+          <div>
+            <button onClick={onSubmit}>Submit</button>
+          </div>
+
           {emojiShown && (
             <div>
               <EmojiPicker
@@ -72,6 +70,17 @@ export default function EditMessage({ data, index, id, socket }) {
             </div>
           )}
         </form>
+        <button
+          onClick={() =>
+            socket.current.emit("cancel-edit", {
+              index: index,
+              chat_id: id,
+            })
+          }
+          id="cancel"
+        >
+          <Image src={cancel} alt="cancel" width={15}></Image>
+        </button>
       </div>
     </>
   );

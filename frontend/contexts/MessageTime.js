@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-const MessageTimeContext = createContext({
+export const MessageTimeContext = createContext({
   showTime: false,
   changeTime: () => {},
 });
@@ -17,10 +17,8 @@ export function MessageTimeProvider({ children }) {
     changeTime: changeTime,
   };
   return (
-    <MessageTimeContext value={messageValue}>{children}</MessageTimeContext>
+    <MessageTimeContext.Provider value={messageValue}>
+      {children}
+    </MessageTimeContext.Provider>
   );
-}
-
-export function useMessageTime() {
-  return useContext(MessageTimeContext);
 }

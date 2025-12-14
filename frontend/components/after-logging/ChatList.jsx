@@ -1,7 +1,16 @@
-import { useMessageTime } from "@/contexts/MessageTime";
+import { useMessageTime } from "@/hooks/useMessageTime";
+import { useToast } from "@/hooks/useToast";
 
-export default function ChatList({ chats, setCurrentChat, messages, socket }) {
-  const { showTime, changeTime } = useMessageTime();
+export default function ChatList({
+  chats,
+  currentChat,
+  setCurrentChat,
+  messages,
+  socket,
+}) {
+  const { showTime } = useMessageTime();
+  const { addToast } = useToast();
+
   return (
     <>
       <div id="all-chats">
@@ -34,6 +43,10 @@ export default function ChatList({ chats, setCurrentChat, messages, socket }) {
                 onClick={(e) => {
                   e.stopPropagation();
                   socket.current.emit("deleteChat", chat.id);
+                  if (currentChat.id == chat.id) {
+                    setCurrentChat({});
+                  }
+                  addToast(`You deleted chat: ${chat.name}`, "info");
                 }}
               >
                 Delete

@@ -3,8 +3,10 @@ import Image from "next/image";
 import sendIcon from "@/images/send.svg";
 import emoji from "@/images/emoji-icon.svg";
 import EmojiPicker from "emoji-picker-react";
+import { useToast } from "@/hooks/useToast";
 
 export default function InputCurrChat({ inputRef, socket, user, currentChat }) {
+  const { addToast } = useToast();
   const [showPicker, setShowPicker] = useState(false);
   useEffect(() => {
     inputRef.current.focus();
@@ -48,7 +50,7 @@ export default function InputCurrChat({ inputRef, socket, user, currentChat }) {
   //   }
   // }
 
-  function onInputSubmit(e) {
+  function onSubmit(e) {
     e.preventDefault();
     const msg = inputRef.current.value;
     const c_msg = msg.trim();
@@ -61,26 +63,14 @@ export default function InputCurrChat({ inputRef, socket, user, currentChat }) {
       botAnswer(c_msg);
       inputRef.current.value = "";
       setShowPicker(false);
+    } else {
+      addToast("You can't send blank message", "warning");
     }
   }
 
-  function onButtonClick() {
-    const msg = inputRef.current.value;
-    const c_msg = msg.trim();
-    if (c_msg !== "") {
-      socket.current.emit("regularMessage", {
-        user: user,
-        chat_id: currentChat.id,
-        msg: c_msg,
-      });
-      botAnswer(c_msg);
-      inputRef.current.value = "";
-      setShowPicker(false);
-    }
-  }
   return (
     <>
-      <form onSubmit={onInputSubmit} id="input-message">
+      <form onSubmit={onSubmit} id="input-message">
         <input
           ref={inputRef}
           type="text"
@@ -93,7 +83,7 @@ export default function InputCurrChat({ inputRef, socket, user, currentChat }) {
         >
           <Image src={emoji} alt="emoji" width={20} />
         </button>
-        <button id="send-button" onClick={onButtonClick}>
+        <button id="send-button" onClick={onSubmit}>
           <Image id="send-img" src={sendIcon} alt="sendIc" width={20} />
         </button>
         {showPicker && (
