@@ -18,6 +18,7 @@
   padding: 20px;
   background-color: whitesmoke;
   border-radius: 20px;
+  animation: zoom-in 0.3s forwards;
 }
 
 #logging-menu button {
@@ -34,4 +35,15 @@
 #logging-menu input,
 button {
   margin-top: 10px;
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.5);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

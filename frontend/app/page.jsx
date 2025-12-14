@@ -1,5 +1,6 @@
 "use client";
 import ChatMenu from "@/components/after-logging/ChatMenu";
+import InputModal from "@/components/after-logging/InputModal";
 import Loading from "@/components/Loading";
 import LoggingMenu from "@/components/LoggingMenu";
 import { MessageTimeProvider } from "@/contexts/MessageTime";
@@ -15,6 +16,9 @@ export default function Main() {
   const [chats, setChats] = useState([]); //lista {id, name}
   const [currentChat, setCurrentChat] = useState({}); //id, name chatu
   const [messages, setMessages] = useState([]);
+
+  const [showChatInput, setShowChatInput] = useState(false);
+  const [leavingChatInput, setLeavingChatInput] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
@@ -34,6 +38,8 @@ export default function Main() {
     });
 
     socket.current.on("chatRoomSuccess", ({ name, id }) => {
+      setLeavingChatInput(true);
+      setTimeout(() => setShowChatInput(false), 300);
       setChats((prev) => [...prev, { id, name }]);
     });
 
@@ -67,6 +73,8 @@ export default function Main() {
       ) : (
         <MessageTimeProvider>
           <ChatMenu
+            setLeavingChatInput={setLeavingChatInput}
+            setShowChatInput={setShowChatInput}
             user={user}
             currentChat={currentChat}
             setCurrentChat={setCurrentChat}
@@ -75,6 +83,14 @@ export default function Main() {
             chats={chats}
             setUser={setUser}
           />
+          {showChatInput && (
+            <InputModal
+              setShowChatInput={setShowChatInput}
+              socket={socket}
+              leavingChatInput={leavingChatInput}
+              setLeavingChatInput={setLeavingChatInput}
+            />
+          )}
         </MessageTimeProvider>
       )}
     </>

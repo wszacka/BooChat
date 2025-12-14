@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Status from "./Status";
-import avatar from "@/images/trzask.jpg";
+import avatar from "@/images/avatar.png";
 import { useToast } from "@/hooks/useToast";
 
 export default function UserAccount({ user, setUser, socket }) {

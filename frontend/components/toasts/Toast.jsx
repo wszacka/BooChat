@@ -1,22 +1,25 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function Toast({ id, type, content, onClose }) {
+export default function Toast({ id, type, content, setToasts }) {
   const [show, setShow] = useState(true);
   const timerRef = useRef(null); // osobny timer dla każdego
 
   function handleClose() {
     setShow(false); // odpala animację wyjścia
-    setTimeout(() => onClose(id), 300); // usuń toast po animacji
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 300); // usuń toast po animacji
   }
 
   useEffect(() => {
     timerRef.current = setTimeout(() => {
       setShow(false); // odpala animację wyjścia
-      setTimeout(() => onClose(id), 300); // usuń toast po animacji
+      setTimeout(
+        () => setToasts((prev) => prev.filter((t) => t.id !== id)),
+        300
+      ); // usuń toast po animacji
     }, 3000); // auto-close
     return () => clearTimeout(timerRef.current);
-  }, [id]);
+  }, [id, setToasts]);
 
   const icons = {
     success: "✅",

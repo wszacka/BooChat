@@ -8,6 +8,8 @@ import UserAccount from "./UserAccount";
 import { useToast } from "@/hooks/useToast";
 
 export default function ChatMenu({
+  setLeavingChatInput,
+  setShowChatInput,
   user,
   currentChat,
   setCurrentChat,
@@ -19,13 +21,7 @@ export default function ChatMenu({
   const { showTime, changeTime } = useMessageTime();
   const { addToast } = useToast();
 
-  function newChatButton() {
-    const newChat = prompt("Enter name for your chat");
-    socket.current.emit("createChatroom", newChat);
-    addToast(`Created new chat: ${newChat}`, "success");
-  }
-
-  function buttonClick() {
+  function timeClick() {
     if (messages.length === 0) {
       addToast("You have to write a message to show time", "warning");
     } else {
@@ -43,10 +39,16 @@ export default function ChatMenu({
               <p>BooChat</p>
             </div>
             <div id="buttons-chat">
-              <button id="new-chat" onClick={newChatButton}>
+              <button
+                id="new-chat"
+                onClick={() => {
+                  setShowChatInput(true);
+                  setLeavingChatInput(false);
+                }}
+              >
                 New Chat
               </button>
-              <button onClick={buttonClick} id="time-button">
+              <button onClick={timeClick} id="time-button">
                 {showTime ? "Hide Time" : "Show Time"}
               </button>
             </div>

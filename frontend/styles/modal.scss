@@ -1,0 +1,85 @@
+@use "variables" as *;
+#modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 98;
+}
+
+#modal-content {
+  width: max-content;
+  background-color: $chat_color;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 99; /* wyżej niż overlay */
+  width: 400px;
+  max-width: 90%;
+  animation: zoom-in 0.3s forwards;
+}
+
+#modal-form {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#modal-content #buttons {
+  display: flex; /* układa dzieci w jednej linii */
+  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#modal-content input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#modal-content button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+}
+
+#modal-content button:hover {
+  background-color: $chat_button_hover;
+}
+
+#modal-content.exit {
+  animation: zoom-out 0.3s forwards;
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.5);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.5);
+    opacity: 0.6;
+  }
+}

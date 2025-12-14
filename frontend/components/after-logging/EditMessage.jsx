@@ -70,18 +70,18 @@ export default function EditMessage({ data, index, id, socket }) {
             </div>
           )}
         </form>
-        <button
-          onClick={() =>
-            socket.current.emit("cancel-edit", {
-              index: index,
-              chat_id: id,
-            })
-          }
-          id="cancel"
-        >
-          <Image src={cancel} alt="cancel" width={15}></Image>
-        </button>
       </div>
+      <button
+        onClick={() =>
+          socket.current.emit("cancel-edit", {
+            index: index,
+            chat_id: id,
+          })
+        }
+        id="cancel"
+      >
+        <Image src={cancel} alt="cancel" width={15}></Image>
+      </button>
     </>
   );
 }

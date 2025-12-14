@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import Toast from "./Toast";
 
-export default function ToastContainer({ toasts, removeToast }) {
+export default function ToastContainer({ toasts, setToasts }) {
   if (toasts.length === 0) return null;
 
   return createPortal(
@@ -12,7 +12,7 @@ export default function ToastContainer({ toasts, removeToast }) {
           id={toast.id}
           type={toast.type}
           content={toast.content}
-          onClose={removeToast}
+          setToasts={setToasts}
         />
       ))}
     </div>,

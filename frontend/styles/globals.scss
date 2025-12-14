@@ -1,5 +1,5 @@
 @use "variables" as *;
-
+//globals + toasts
 * {
   padding: 0;
   margin: 0;
@@ -34,6 +34,9 @@ body {
 }
 
 .toast-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   z-index: 100;
   position: fixed;
   right: 20px;
@@ -42,6 +45,7 @@ body {
 }
 
 .toast {
+  width: max-content;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -56,9 +60,15 @@ body {
   animation: toast-out 0.3s ease forwards;
 }
 
-.toast-close,
-#comparison-x {
-  border-radius: 10px;
+.toast-close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 10px;
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
   border: none;
   background-color: #333;
   color: white;
