@@ -6,6 +6,11 @@ import CurrentChat from "./CurrentChat";
 import { useMessageTime } from "@/hooks/useMessageTime";
 import UserAccount from "./UserAccount";
 import { useToast } from "@/hooks/useToast";
+import { memo } from "react";
+
+const MemoUserAccount = memo(UserAccount, (prev, next) => {
+  return prev.user.id === next.user.id;
+});
 
 export default function ChatMenu({
   setLeavingChatInput,
@@ -60,7 +65,7 @@ export default function ChatMenu({
             messages={messages}
             socket={socket}
           />
-          <UserAccount user={user} setUser={setUser} socket={socket} />
+          <MemoUserAccount user={user} setUser={setUser} socket={socket} />
         </div>
         <div id="chatroom">
           {currentChat.id ? (

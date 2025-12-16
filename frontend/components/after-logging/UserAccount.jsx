@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/useToast";
 
 export default function UserAccount({ user, setUser, socket }) {
   const { addToast } = useToast();
+  console.log("reneruje");
   return (
     <>
       <div id="user-div">

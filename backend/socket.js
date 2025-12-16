@@ -21,7 +21,7 @@ const answers = ["OK", "Nice!", "WOW!", "Super", "Hi"];
 const users = {}; //socket.id: login
 const chatrooms = {}; //chat_id: nazwa
 
-const messages = {}; // chat_id: [tutaj potem {message: tresc msg,user: od kogo, godzina: timestamp(hh:mm), under_edit: boolean, last_edited: czas kiedy ostatnio byla edycja}]
+const messages = {}; // chat_id: [tutaj potem {msg_id: id wiadomosci, message: tresc msg,user: od kogo, godzina: timestamp(hh:mm), under_edit: boolean, last_edited: czas kiedy ostatnio byla edycja}]
 
 async function generate(zdanie) {
   const prompt = `Jesteś moim kumplem. Odpowiadasz w żartobliwy sposób z emotikonami.
@@ -106,11 +106,13 @@ io.on("connection", (socket) => {
 
   socket.on("regularMessage", ({ user, chat_id, msg }) => {
     try {
+      const msg_id = uuidv4();
       const now = new Date();
       const minutes =
         now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
       const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
       messages[chat_id].push({
+        msg_id: msg_id,
         message: msg,
         user: user,
         time: `${hour}:${minutes}`,
@@ -162,7 +164,7 @@ io.on("connection", (socket) => {
       const minutes =
         now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
       const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
-      messages[chat_id].map((data, i) => {
+      messages[chat_id].forEach((data, i) => {
         if (i === index) {
           data.message = msg;
           data.under_edit = false;
