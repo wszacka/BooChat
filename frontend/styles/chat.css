@@ -95,11 +95,65 @@ option:hover {
   max-height: 310px;
 }
 
+.chatsmall {
+  display: flex;
+  max-width: 60px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#all-chats .chatsmall p:first-child {
+  max-width: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#buttons-chat.chatsmall button {
+  margin: 10px;
+}
+#buttons-chat.chatsmall #time-button {
+  font-size: x-small;
+}
+
+#userShow {
+  background-color: #b9bacf;
+}
+
+#userShow button {
+  margin: 10px;
+  font-size: x-small;
+}
+
+#user-div.small-user {
+  position: absolute;
+  bottom: 60px;
+  left: 30px;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 97;
+}
+
+.chatsmall .delete-chat {
+  display: block;
+  position: relative;
+  top: auto;
+  right: auto;
+  margin: 0;
+}
+
 .chat:hover {
   background-color: #b9bacf;
 }
 
 .chat p:first-child {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: bold;
   padding: 10px;
 }
@@ -155,4 +209,10 @@ option:hover {
 
 .delete-chat:hover {
   background-color: rgb(222, 30, 30);
+}
+
+@media (max-width: 700px) {
+  #chat-menu {
+    grid-template-columns: 60px 1fr; /* sidebar schowany */
+  }
 }/*# sourceMappingURL=chat.css.map */
