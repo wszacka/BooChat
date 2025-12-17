@@ -1,13 +1,10 @@
+import { useApp } from "@/contexts/AppContext";
+import { useMessageTime } from "@/hooks/useMessageTime";
 import edit from "@/images/edit.svg";
 import Image from "next/image";
-export default function RegularMessage({
-  data,
-  i,
-  currentChat,
-  showTime,
-  socket,
-  user,
-}) {
+export default function RegularMessage({ data, i, chatId }) {
+  const { user, socket } = useApp();
+  const { showTime } = useMessageTime();
   return (
     <>
       <div className="message-div">
@@ -29,7 +26,7 @@ export default function RegularMessage({
           onClick={() =>
             socket.current.emit("click-edit", {
               index: i,
-              chat_id: currentChat.id,
+              chat_id: chatId,
             })
           }
         >

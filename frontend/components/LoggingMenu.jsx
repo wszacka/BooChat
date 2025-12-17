@@ -3,10 +3,12 @@ import ghost from "@/images/ghost-icon.svg";
 import { useEffect, useRef } from "react";
 import "@/styles/loggingMenu.css";
 import { useToast } from "@/hooks/useToast";
+import { useApp } from "@/contexts/AppContext";
 
-export default function LoggingMenu({ socket }) {
+export default function LoggingMenu() {
   const myUsernameRef = useRef(null);
   const { addToast } = useToast();
+  const { socket } = useApp();
 
   useEffect(() => {
     //focus na input

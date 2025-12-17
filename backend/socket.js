@@ -97,7 +97,11 @@ io.on("connection", (socket) => {
           "and name:",
           roomName
         );
-        socket.emit("chatRoomSuccess", { name: roomName, id: chat_id });
+        socket.emit("chatRoomSuccess", {
+          name: roomName,
+          id: chat_id,
+          msgs: messages,
+        });
       }
     } catch (err) {
       socket.emit("error", err);
@@ -111,6 +115,7 @@ io.on("connection", (socket) => {
       const minutes =
         now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
       const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
+      console.log(user, chat_id, msg);
       messages[chat_id].push({
         msg_id: msg_id,
         message: msg,
@@ -181,6 +186,7 @@ io.on("connection", (socket) => {
   socket.on("deleteChat", (chat_id) => {
     try {
       delete chatrooms[chat_id];
+      delete messages[chat_id];
       socket.emit("leaveChat", chat_id);
     } catch (err) {
       socket.emit("error", err);
@@ -190,6 +196,16 @@ io.on("connection", (socket) => {
   socket.on("logout", (user) => {
     try {
       delete users[socket.id];
+      for (let key in messages) {
+        if (messages.hasOwnProperty(key)) {
+          delete messages[key];
+        }
+      }
+      for (let key in chatrooms) {
+        if (chatrooms.hasOwnProperty(key)) {
+          delete chatrooms[key];
+        }
+      }
       console.log(`User ${user} logged out`);
       socket.emit("logout-user");
     } catch (err) {
@@ -201,6 +217,16 @@ io.on("connection", (socket) => {
     try {
       console.log("User disconnected: ", socket.id);
       delete users[socket.id];
+      for (let key in messages) {
+        if (messages.hasOwnProperty(key)) {
+          delete messages[key];
+        }
+      }
+      for (let key in chatrooms) {
+        if (chatrooms.hasOwnProperty(key)) {
+          delete chatrooms[key];
+        }
+      }
       socket.emit("logout-user");
     } catch (err) {
       socket.emit("error", err);

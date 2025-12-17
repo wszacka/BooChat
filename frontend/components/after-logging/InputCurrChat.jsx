@@ -1,101 +1,59 @@
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import sendIcon from "@/images/send.svg";
-import emoji from "@/images/emoji-icon.svg";
-import EmojiPicker from "emoji-picker-react";
-import { useToast } from "@/hooks/useToast";
+import "@/styles/modal.css";
 
-export default function InputCurrChat({ inputRef, socket, user, currentChat }) {
+import { useToast } from "@/hooks/useToast";
+import sendIcon from "@/images/send.svg";
+import cancel from "@/images/cancel-edit.svg";
+import Image from "next/image";
+import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { useApp } from "@/contexts/AppContext";
+
+export default function InputModal({}) {
+  const { socket, setShowChatInput, setLeavingChatInput, leavingChatInput } =
+    useApp();
   const { addToast } = useToast();
-  const [showPicker, setShowPicker] = useState(false);
+  const inputRef = useRef(null);
+
   useEffect(() => {
     inputRef.current.focus();
-  }, [inputRef]);
-
-  function onEmojiClick(emoji) {
-    if (inputRef.current) {
-      inputRef.current.value += emoji.emoji;
-
-      inputRef.current.focus();
-    }
-  }
-
-  async function botAnswer() {
-    const res = await fetch("http://localhost:8000/api");
-    const data = await res.json();
-    if (res.ok) {
-      socket.current.emit("regularMessage", {
-        user: currentChat.name,
-        chat_id: currentChat.id,
-        msg: data.answer,
-      });
-    }
-  }
-
-  // async function botAnswer(msg) {
-  //   try {
-  //     const res = await fetch(
-  //       `http://localhost:8000/api/${encodeURIComponent(msg)}`
-  //     );
-  //     const data = await res.json();
-  //     if (res.ok) {
-  //       socket.current.emit("regularMessage", {
-  //         user: currentChat.name,
-  //         chat_id: currentChat.id,
-  //         msg: data.answer,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Błąd fetch:", error);
-  //   }
-  // }
+  }, []);
 
   function onSubmit(e) {
+    const newChat = inputRef.current.value;
     e.preventDefault();
-    const msg = inputRef.current.value;
-    const c_msg = msg.trim();
-    if (c_msg !== "") {
-      socket.current.emit("regularMessage", {
-        user: user,
-        chat_id: currentChat.id,
-        msg: c_msg,
-      });
-      botAnswer(c_msg);
+    socket.current.emit("createChatroom", newChat);
+    if (newChat !== null && newChat.trim() !== "") {
+      addToast(`Created new chat: ${newChat}`, "success");
       inputRef.current.value = "";
-      setShowPicker(false);
     } else {
-      addToast("You can't send blank message", "warning");
+      addToast("You can't have chat with blank name", "warning");
     }
   }
 
-  return (
+  return createPortal(
     <>
-      <form onSubmit={onSubmit} id="input-message">
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="Write a message..."
-        ></input>
-        <button
-          type="button"
-          id="emoji-button"
-          onClick={() => setShowPicker((prev) => !prev)}
-        >
-          <Image src={emoji} alt="emoji" width={20} />
-        </button>
-        <button id="send-button" onClick={onSubmit}>
-          <Image id="send-img" src={sendIcon} alt="sendIc" width={20} />
-        </button>
-        {showPicker && (
-          <div>
-            <EmojiPicker
-              emojiStyle="native"
-              onEmojiClick={onEmojiClick}
-              style={{ position: "absolute", bottom: "30px", right: "20px" }}
-            />
-          </div>
-        )}
-      </form>
-    </>
+      <div id="modal-overlay">
+        <div id="modal-content" className={leavingChatInput ? "exit" : ""}>
+          <form onSubmit={onSubmit} id="modal-form">
+            <h4>Enter name for your chat</h4>
+            <div id="buttons">
+              <input ref={inputRef} placeholder="Aa..."></input>
+              <button onClick={onSubmit}>
+                <Image src={sendIcon} alt={"submit"} width={20}></Image>
+              </button>
+            </div>
+          </form>
+          <button
+            onClick={() => {
+              setLeavingChatInput(true);
+              setTimeout(() => setShowChatInput(false), 200);
+            }}
+          >
+            <Image src={cancel} alt={"submit"} width={20}></Image>
+          </button>
+        </div>
+      </div>
+    </>,
+    document.getElementById("modal-root")
   );
 }

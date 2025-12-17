@@ -2,10 +2,11 @@ import Image from "next/image";
 import Status from "./Status";
 import avatar from "@/images/avatar.png";
 import { useToast } from "@/hooks/useToast";
+import { useApp } from "@/contexts/AppContext";
 
-export default function UserAccount({ user, setUser, socket }) {
+export default function UserAccount() {
+  const { user, setUser, socket } = useApp();
   const { addToast } = useToast();
-  console.log("reneruje");
   return (
     <>
       <div id="user-div">

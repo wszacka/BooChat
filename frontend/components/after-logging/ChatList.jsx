@@ -1,13 +1,13 @@
+"use client";
+import { useParams, useRouter } from "next/navigation";
+import { useApp } from "@/contexts/AppContext";
 import { useMessageTime } from "@/hooks/useMessageTime";
 import { useToast } from "@/hooks/useToast";
 
-export default function ChatList({
-  chats,
-  currentChat,
-  setCurrentChat,
-  messages,
-  socket,
-}) {
+export default function ChatList({ params }) {
+  const { chatId, name } = useParams();
+  const router = useRouter();
+  const { chats, messages, socket, setMessages } = useApp();
   const { showTime } = useMessageTime();
   const { addToast } = useToast();
 
@@ -21,7 +21,7 @@ export default function ChatList({
             <div
               key={i}
               className="chat"
-              onClick={() => setCurrentChat({ id: chat.id, name: chat.name })}
+              onClick={() => router.push(`/chat/${chat.id}/${chat.name}`)}
             >
               <p>
                 {chat.name}{" "}
@@ -43,8 +43,13 @@ export default function ChatList({
                 onClick={(e) => {
                   e.stopPropagation();
                   socket.current.emit("deleteChat", chat.id);
-                  if (currentChat.id == chat.id) {
-                    setCurrentChat({});
+                  if (chatId == chat.id) {
+                    router.replace("/chat");
+                    setMessages((prev) => {
+                      const newMessages = { ...prev };
+                      delete newMessages[chat.id];
+                      return newMessages;
+                    });
                   }
                   addToast(`You deleted chat: ${chat.name}`, "info");
                 }}

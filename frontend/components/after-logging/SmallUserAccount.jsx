@@ -3,10 +3,11 @@ import Status from "./Status";
 import avatar from "@/images/avatar.png";
 import { useToast } from "@/hooks/useToast";
 import { createPortal } from "react-dom";
+import { useApp } from "@/contexts/AppContext";
 
-export default function SmallUserAccount({ user, setUser, socket }) {
+export default function SmallUserAccount() {
+  const { user, setUser, socket } = useApp();
   const { addToast } = useToast();
-  console.log("reneruje");
   return createPortal(
     <>
       <div id="user-div" className="small-user">

@@ -1,6 +1,8 @@
+"use client";
 import "@/styles/globals.css";
 
 import { ToastProvider } from "@/contexts/Toasts";
+import { AppProvider } from "@/contexts/AppContext";
 
 export default function RootLayout({ children }) {
   return (
@@ -12,10 +14,12 @@ export default function RootLayout({ children }) {
       />
       <body>
         <ToastProvider>
-          {children}
-          <div id="toast-root"></div>
-          <div id="modal-root"></div>
-          <div id="user-root"></div>
+          <AppProvider>
+            {children}
+            <div id="toast-root"></div>
+            <div id="modal-root"></div>
+            <div id="user-root"></div>
+          </AppProvider>
         </ToastProvider>
       </body>
     </html>

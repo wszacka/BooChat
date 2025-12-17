@@ -4,17 +4,18 @@ import RegularMessage from "./RegularMessage";
 import EditMessage from "./EditMessage";
 import InputCurrChat from "./InputCurrChat";
 import { useRef } from "react";
+import { useApp } from "@/contexts/AppContext";
 
-export default function CurrentChat({ socket, user, currentChat, messages }) {
+export default function CurrentChat({ chatId, name }) {
+  const { socket, user, messages } = useApp();
   const inputRef = useRef(null);
-  const { showTime } = useMessageTime();
 
   return (
     <>
       <div>
         <div id="all-messages">
-          {messages[currentChat.id] ? (
-            messages[currentChat.id].map((data, i) => {
+          {messages[chatId] ? (
+            messages[chatId].map((data, i) => {
               return (
                 <div
                   key={i}
@@ -24,15 +25,14 @@ export default function CurrentChat({ socket, user, currentChat, messages }) {
                     <EditMessage
                       data={data}
                       index={i}
-                      id={currentChat.id}
+                      id={chatId}
                       socket={socket}
                     />
                   ) : (
                     <RegularMessage
                       data={data}
                       i={i}
-                      currentChat={currentChat}
-                      showTime={showTime}
+                      chatId={chatId}
                       socket={socket}
                       user={user}
                     />
@@ -45,12 +45,7 @@ export default function CurrentChat({ socket, user, currentChat, messages }) {
           )}
         </div>
 
-        <InputCurrChat
-          inputRef={inputRef}
-          socket={socket}
-          user={user}
-          currentChat={currentChat}
-        />
+        <InputCurrChat inputRef={inputRef} chatId={chatId} name={name} />
       </div>
     </>
   );
