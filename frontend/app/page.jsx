@@ -1,11 +1,17 @@
-import ghost from "@/images/ghost-icon.svg";
-import Image from "next/image";
-export default function Loading() {
-  return (
-    <>
-      <div id="loading">
-        <Image src={ghost} alt="loading..." width={70} id="loading-pic" />
-      </div>
-    </>
-  );
+"use client";
+import { useApp } from "@/contexts/AppContext";
+import LoggingMenu from "@/components/LoggingMenu";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function HomePage() {
+  const { user, loading } = useApp();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) router.replace("/chat");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  return <LoggingMenu />;
 }

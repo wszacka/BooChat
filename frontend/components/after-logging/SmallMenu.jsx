@@ -5,16 +5,7 @@ import { useMessageTime } from "@/hooks/useMessageTime";
 import { useApp } from "@/contexts/AppContext";
 
 export default function SmallMenu({ timeClick }) {
-  const {
-    user,
-    chats,
-    socket,
-    currentChat,
-    setCurrentChat,
-    setUser,
-    setShowChatInput,
-    setLeavingChatInput,
-  } = useApp();
+  const { setShowChatInput, setLeavingChatInput } = useApp();
   const [showUserDiv, setShowUserDiv] = useState(false);
   const { showTime } = useMessageTime();
 

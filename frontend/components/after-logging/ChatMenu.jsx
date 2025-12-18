@@ -38,7 +38,6 @@ export default function ChatMenu({ children }) {
   }, []);
 
   function timeClick() {
-    console.log(messages);
     const hasMessages = Object.values(messages).some(
       (msgsArray) => msgsArray.length > 0
     );

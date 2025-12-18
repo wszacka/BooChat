@@ -42,9 +42,61 @@ export default function useAppState() {
       addToast(`error: ${msg}`, "error");
     });
 
-    socket.current.on("chatMsg", (msgs) => {
-      setMessages(msgs);
+    socket.current.on("chatMsg", ({ id, msg }) => {
+      setMessages((prev) => {
+        const chatMessages = prev[id] || [];
+        return {
+          ...prev,
+          [id]: [...chatMessages, msg],
+        };
+      });
     });
+
+    socket.current.on("edit-msg-click", ({ chatId, msg_id }) => {
+      setMessages((prev) => {
+        const chatMessages = prev[chatId] || [];
+        return {
+          ...prev,
+          [chatId]: chatMessages.map((msg) =>
+            msg.msg_id === msg_id ? { ...msg, under_edit: true } : msg
+          ),
+        };
+      });
+    });
+
+    socket.current.on("edit-msg-unclick", ({ chatId, msg_id }) => {
+      setMessages((prev) => {
+        const chatMessages = prev[chatId] || [];
+        return {
+          ...prev,
+          [chatId]: chatMessages.map((msg) =>
+            msg.msg_id === msg_id ? { ...msg, under_edit: false } : msg
+          ),
+        };
+      });
+    });
+
+    socket.current.on(
+      "edit-msg-finalize",
+      ({ chatId, msg_id, new_msg, last_edited }) => {
+        setMessages((prev) => {
+          const chatMessages = prev[chatId] || [];
+          return {
+            ...prev,
+            [chatId]: chatMessages.map((msg) =>
+              msg.msg_id === msg_id
+                ? {
+                    ...msg,
+                    message: new_msg,
+                    under_edit: false,
+                    last_edited: last_edited,
+                  }
+                : msg
+            ),
+          };
+        });
+      }
+    );
 
     socket.current.on("logout-user", () => {
       setChats([]);

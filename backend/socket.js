@@ -116,20 +116,21 @@ io.on("connection", (socket) => {
         now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
       const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
       console.log(user, chat_id, msg);
-      messages[chat_id].push({
+      const new_msg = {
         msg_id: msg_id,
         message: msg,
         user: user,
         time: `${hour}:${minutes}`,
         under_edit: false,
         last_edited: false,
-      });
-      io.to(chat_id).emit("chatMsg", messages);
+      };
+      messages[chat_id].push(new_msg);
+      io.to(chat_id).emit("chatMsg", { id: chat_id, msg: new_msg });
     } catch (err) {
       socket.emit("error", err);
     }
   });
-  socket.on("click-edit", ({ index, chat_id }) => {
+  socket.on("click-edit", ({ msg_id, chat_id }) => {
     try {
       //tylko jedna mozemy edytowac
       const isEditing = messages[chat_id].some((data) => data.under_edit);
@@ -139,45 +140,49 @@ io.on("connection", (socket) => {
         return; // zatrzymuje całą funkcję
       }
 
-      messages[chat_id].forEach((data, i) => {
-        if (i === index) {
+      messages[chat_id].forEach((data) => {
+        if (data.msg_id === msg_id) {
           data.under_edit = true;
         }
       });
-      socket.emit("chatMsg", messages);
+      socket.emit("edit-msg-click", { chatId: chat_id, msg_id: msg_id });
     } catch (err) {
       socket.emit("error", err);
     }
   });
 
-  socket.on("cancel-edit", ({ index, chat_id }) => {
+  socket.on("cancel-edit", ({ msg_id, chat_id }) => {
     try {
-      messages[chat_id].forEach((data, i) => {
-        if (i === index) {
+      messages[chat_id].forEach((data) => {
+        if (data.msg_id === msg_id) {
           data.under_edit = false;
         }
       });
-      socket.emit("chatMsg", messages);
+      socket.emit("edit-msg-unclick", { chatId: chat_id, msg_id: msg_id });
     } catch (err) {
       socket.emit("error", err);
     }
   });
 
-  socket.on("edit-msg", ({ index, chat_id, msg }) => {
+  socket.on("edit-msg", ({ msg_id, chat_id, msg }) => {
     try {
       const now = new Date();
       const minutes =
         now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
       const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
-      messages[chat_id].forEach((data, i) => {
-        if (i === index) {
+      messages[chat_id].forEach((data) => {
+        if (data.msg_id === msg_id) {
           data.message = msg;
           data.under_edit = false;
           data.last_edited = `${hour}:${minutes}`;
         }
       });
-      console.log("Edited message to:", msg);
-      socket.emit("chatMsg", messages);
+      socket.emit("edit-msg-finalize", {
+        chatId: chat_id,
+        msg_id: msg_id,
+        new_msg: msg,
+        last_edited: `${hour}:${minutes}`,
+      });
     } catch (err) {
       socket.emit("error", err);
     }

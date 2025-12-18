@@ -5,7 +5,7 @@ import "@/styles/currentChat.css";
 export default function ChatPage() {
   return (
     <ChatMenu>
-      <p>Select Chat to start a conversation</p>
+      <p className="chat-info">Select Chat to start a conversation</p>
     </ChatMenu>
   );
 }

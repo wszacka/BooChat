@@ -1,12 +1,11 @@
 import EmojiPicker from "emoji-picker-react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import emoji from "@/images/emoji-icon.svg";
 import cancel from "@/images/cancel-edit.svg";
 import Image from "next/image";
-import { useToast } from "@/hooks/useToast";
 
-export default function EditMessage({ data, index, id, socket }) {
-  const { addToast } = useToast();
+function EditMessage({ data, id, socket, addToast }) {
+  console.log("render EDITMSG"); //czy memo dziala
   const editRef = useRef(data.message);
   const [emojiShown, setEmojiShown] = useState(false);
 
@@ -20,7 +19,7 @@ export default function EditMessage({ data, index, id, socket }) {
     const c_msg = msg.trim();
     if (msg !== data.message && c_msg !== "") {
       socket.current.emit("edit-msg", {
-        index: index,
+        msg_id: data.msg_id,
         chat_id: id,
         msg: c_msg,
       });
@@ -74,7 +73,7 @@ export default function EditMessage({ data, index, id, socket }) {
       <button
         onClick={() =>
           socket.current.emit("cancel-edit", {
-            index: index,
+            msg_id: data.msg_id,
             chat_id: id,
           })
         }
@@ -85,3 +84,7 @@ export default function EditMessage({ data, index, id, socket }) {
     </>
   );
 }
+
+export default React.memo(EditMessage, (prev, next) => {
+  return prev.data === next.data && prev.id === next.id;
+});

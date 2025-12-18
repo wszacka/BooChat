@@ -28,19 +28,21 @@ export default function LoggingMenu() {
 
   return (
     <>
-      <div id="logging-menu">
-        <Image src={ghost} alt={"ghost icon"} width={50} />
-        <h1>BooChat</h1>
-        <div>
-          <h4>Log in</h4>
-          <form onSubmit={handleSubmit}>
-            <input
-              ref={myUsernameRef}
-              type="text"
-              placeholder="Type your login"
-            ></input>
-            <button>Log in</button>
-          </form>
+      <div id="menu">
+        <div id="logging-menu">
+          <Image src={ghost} alt={"ghost icon"} width={50} />
+          <h1>BooChat</h1>
+          <div>
+            <h4>Log in</h4>
+            <form onSubmit={handleSubmit}>
+              <input
+                ref={myUsernameRef}
+                type="text"
+                placeholder="Type your login"
+              ></input>
+              <button>Log in</button>
+            </form>
+          </div>
         </div>
       </div>
     </>

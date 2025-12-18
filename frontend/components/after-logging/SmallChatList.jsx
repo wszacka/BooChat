@@ -4,10 +4,9 @@ import { useToast } from "@/hooks/useToast";
 import { useParams, useRouter } from "next/navigation";
 
 export default function SmallChatList() {
-  const { chatId, name } = useParams();
+  const { chatId } = useParams();
   const { chats, setMessages, socket } = useApp();
   const router = useRouter();
-  const { showTime } = useMessageTime();
   const { addToast } = useToast();
 
   return (

@@ -4,15 +4,18 @@ import { useToast } from "@/hooks/useToast";
 import sendIcon from "@/images/send.svg";
 import cancel from "@/images/cancel-edit.svg";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { useApp } from "@/contexts/AppContext";
 
-export default function InputModal({
-  socket,
-  setShowChatInput,
-  leavingChatInput,
-  setLeavingChatInput,
-}) {
+export default function InputModal({}) {
+  const {
+    user,
+    socket,
+    setShowChatInput,
+    setLeavingChatInput,
+    leavingChatInput,
+  } = useApp();
   const { addToast } = useToast();
   const inputRef = useRef(null);
 
@@ -23,10 +26,12 @@ export default function InputModal({
   function onSubmit(e) {
     const newChat = inputRef.current.value;
     e.preventDefault();
-    socket.current.emit("createChatroom", newChat);
-    if (newChat !== null && newChat.trim() !== "") {
+    if (newChat !== null && newChat.trim() !== "" && newChat !== user) {
       addToast(`Created new chat: ${newChat}`, "success");
+      socket.current.emit("createChatroom", newChat);
       inputRef.current.value = "";
+    } else if (newChat === user) {
+      addToast("You can't name a chat like your name", "warning");
     } else {
       addToast("You can't have chat with blank name", "warning");
     }

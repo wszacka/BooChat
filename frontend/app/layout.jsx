@@ -1,5 +1,6 @@
 "use client";
 import "@/styles/globals.css";
+import "@/styles/loggingMenu.css";
 
 import { ToastProvider } from "@/contexts/Toasts";
 import { AppProvider } from "@/contexts/AppContext";

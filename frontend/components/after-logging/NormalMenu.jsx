@@ -7,8 +7,7 @@ import { useMessageTime } from "@/hooks/useMessageTime";
 import { useApp } from "@/contexts/AppContext";
 
 export default function NormalMenu({ timeClick }) {
-  const { user, socket, setUser, setShowChatInput, setLeavingChatInput } =
-    useApp();
+  const { setShowChatInput, setLeavingChatInput } = useApp();
   const { showTime } = useMessageTime();
 
   return (

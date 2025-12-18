@@ -1,10 +1,8 @@
-import { useApp } from "@/contexts/AppContext";
-import { useMessageTime } from "@/hooks/useMessageTime";
 import edit from "@/images/edit.svg";
 import Image from "next/image";
-export default function RegularMessage({ data, i, chatId }) {
-  const { user, socket } = useApp();
-  const { showTime } = useMessageTime();
+import React from "react";
+function RegularMessage({ data, chatId, user, socket, showTime }) {
+  console.log("RegularMessage render"); // czy memo dziala
   return (
     <>
       <div className="message-div">
@@ -25,7 +23,7 @@ export default function RegularMessage({ data, i, chatId }) {
           className="edit-button"
           onClick={() =>
             socket.current.emit("click-edit", {
-              index: i,
+              msg_id: data.msg_id,
               chat_id: chatId,
             })
           }
@@ -36,3 +34,12 @@ export default function RegularMessage({ data, i, chatId }) {
     </>
   );
 }
+
+export default React.memo(RegularMessage, (prev, next) => {
+  return (
+    prev.data === next.data &&
+    prev.i === next.i &&
+    prev.chatId === next.chatId &&
+    prev.showTime == next.showTime
+  );
+});
