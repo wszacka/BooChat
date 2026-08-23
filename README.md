@@ -15,11 +15,7 @@ Users can chat in real time via WebSockets - messages are delivered instantly as
 
 ## The hard part
 
-Integrating the external AI agent into the real-time chat flow - making sure the AI responses arrived and were displayed in the correct order relative to user messages, without blocking the WebSocket communication for other users in the chat.
-
-## Screenshots / Demo
-
-_(add a screenshot or a short GIF of the chat here)_
+Integrating the external AI agent into the real-time chat flow - making sure the AI responses arrived and were displayed in the correct order relative to user messages, without blocking the WebSocket communication for other users in the chat
 
 ## How to run
 
